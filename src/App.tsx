@@ -1,12 +1,36 @@
-// import { createClient } from '@supabase/supabase-js'
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from 'react'
+import { createDi } from './lib/di'
+import { type Database } from '../database.types'
 
-// const supabase = createClient(
-//   import.meta.env.VITE_SUPABASE_URL,
-//   import.meta.env.VITE_SUPABASE_ANON_KEY
-// )
+export default function App() {
+  const di = createDi()
+  const [expenseCategories, setExpenseCategories] = useState<
+    Database['public']['Tables']['expense_categories']['Row'][]
+  >([])
 
-function App() {
-  return <div>App</div>
+  const fetchExpenseCategories = async () => {
+    const { data, error } = await di.supabase
+      .from('expense_categories')
+      .select()
+
+    if (error) {
+      console.error('Supabase error:', error.message, error.details)
+    }
+    if (data) {
+      setExpenseCategories(data)
+    }
+  }
+
+  useEffect(() => {
+    void fetchExpenseCategories()
+  }, [])
+
+  return (
+    <div>
+      {expenseCategories.map((category) => (
+        <div key={category.id}>{category.name}</div>
+      ))}
+    </div>
+  )
 }
-
-export default App
