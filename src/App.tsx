@@ -1,4 +1,4 @@
-import { createDi } from './lib/di'
+import { createDi, type Di } from './lib/di'
 import { QueryClientProvider, useQuery } from '@tanstack/react-query'
 
 function ExpenseCategories({ di }: { di: Di }) {
