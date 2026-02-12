@@ -1,12 +1,25 @@
 import { createClient } from '@supabase/supabase-js'
+import { QueryClient } from '@tanstack/react-query'
+import { createGetExpenseCategories } from '../api'
+
+export type Di = ReturnType<typeof createDi>
 
 export function createDi() {
-  const supabase = createClient(
+  const apiClient = createClient(
     import.meta.env.VITE_SUPABASE_URL,
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_DEFAULT_KEY
   )
 
+  const queryClient = new QueryClient()
+
+  const getExpenseCategories = createGetExpenseCategories({
+    apiClient,
+    queryClient,
+  })
+
   return {
-    supabase,
+    apiClient,
+    queryClient,
+    getExpenseCategories,
   }
 }

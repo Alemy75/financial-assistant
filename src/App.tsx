@@ -1,36 +1,28 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
 import { createDi } from './lib/di'
-import { type Database } from '../database.types'
+import { QueryClientProvider, useQuery } from '@tanstack/react-query'
+
+function ExpenseCategories({ di }: { di: Di }) {
+  const { data } = useQuery({ ...di.getExpenseCategories.qo() })
+
+  return (
+    <>
+      {data && (
+        <div>
+          {data.map((category) => (
+            <div key={category.id}>{category.name}</div>
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
 
 export default function App() {
   const di = createDi()
-  const [expenseCategories, setExpenseCategories] = useState<
-    Database['public']['Tables']['expense_categories']['Row'][]
-  >([])
-
-  const fetchExpenseCategories = async () => {
-    const { data, error } = await di.supabase
-      .from('expense_categories')
-      .select()
-
-    if (error) {
-      console.error('Supabase error:', error.message, error.details)
-    }
-    if (data) {
-      setExpenseCategories(data)
-    }
-  }
-
-  useEffect(() => {
-    void fetchExpenseCategories()
-  }, [])
 
   return (
-    <div>
-      {expenseCategories.map((category) => (
-        <div key={category.id}>{category.name}</div>
-      ))}
-    </div>
+    <QueryClientProvider client={di.queryClient}>
+      <ExpenseCategories di={di} />
+    </QueryClientProvider>
   )
 }
