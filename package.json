@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "preview": "vite preview",
-    "types": "npx dotenv-cli -e .env -- sh -c 'mkdir -p src/lib && npx supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > ./database.types.ts'"
+    "types": "npx dotenv-cli -e .env -- sh -c 'mkdir -p src/lib && npx supabase gen types typescript --project-id \"$SUPABASE_PROJECT_ID\" > ./src/api/database.types.ts'"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
