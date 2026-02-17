@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #ffffff;
+  --color-secondary: #737373;
+  --color-surface-1: #f8f9fa;
+  --color-surface-2: #f1f3f5;
+  --color-surface-3: #e9ecef;
+  --color-foreground: #212529;
+}
+
+:root {
+  @apply bg-surface-1 text-foreground;
+}

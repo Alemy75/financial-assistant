@@ -1,28 +1,15 @@
-import { createDi, type Di } from './lib/di'
-import { QueryClientProvider, useQuery } from '@tanstack/react-query'
-
-function ExpenseCategories({ di }: { di: Di }) {
-  const { data } = useQuery({ ...di.getExpenseCategories.qo() })
-
-  return (
-    <>
-      {data && (
-        <div>
-          {data.map((category) => (
-            <div key={category.id}>{category.name}</div>
-          ))}
-        </div>
-      )}
-    </>
-  )
-}
+import { ExpensesList } from './components/widgets/expenses-list'
+import { createDi } from './lib/di'
+import { QueryClientProvider } from '@tanstack/react-query'
 
 export default function App() {
   const di = createDi()
 
   return (
     <QueryClientProvider client={di.queryClient}>
-      <ExpenseCategories di={di} />
+      <main className="p-4 max-w-[600px] mx-auto">
+        <ExpensesList di={di} />
+      </main>
     </QueryClientProvider>
   )
 }
