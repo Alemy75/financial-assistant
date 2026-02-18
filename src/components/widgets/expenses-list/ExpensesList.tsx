@@ -27,13 +27,21 @@ export default function ExpensesList({ di }: { di: Di }) {
   return (
     <>
       <div className="overflow-x-auto border border-surface-3 rounded-md text-sm">
-        <table className="min-w-lg w-full border-collapse bg-surface-2">
+        <table className="min-w-[32rem] w-full border-collapse bg-surface-2">
           <thead>
             <tr className="text-left bg-surface-3">
-              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Дата</th>
-              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Стоимость</th>
-              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Название</th>
-              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Категория</th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">
+                Дата
+              </th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">
+                Стоимость
+              </th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">
+                Название
+              </th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">
+                Категория
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -64,9 +72,7 @@ export default function ExpensesList({ di }: { di: Di }) {
                   <td className="p-2 leading-5 whitespace-nowrap">
                     {expense.count != null ? `${expense.count} ₽` : '—'}
                   </td>
-                  <td className="p-2 leading-5">
-                    {expense.name ?? '—'}
-                  </td>
+                  <td className="p-2 leading-5">{expense.name ?? '—'}</td>
                   <td className="p-2 leading-5">
                     {getCategoryName(expense.category_id)}
                   </td>
