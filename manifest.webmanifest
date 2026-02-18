@@ -1,0 +1,1 @@
+{"name":"Financial Assistant","short_name":"Finance","description":"Учёт расходов и категорий","start_url":"/","display":"standalone","background_color":"#f8f9fa","theme_color":"#212529","lang":"en","scope":"/","icons":[{"src":"/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"},{"src":"/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"maskable"}]}
