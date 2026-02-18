@@ -14,6 +14,10 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
   const [open, setOpen] = useState(false)
   const [count, setCount] = useState('')
   const [categoryId, setCategoryId] = useState<string>('')
+  const [validationErrors, setValidationErrors] = useState<{
+    count?: string
+    category?: string
+  }>({})
 
   const { data: categories, isPending: isPendingCategories } = useQuery({
     ...di.getExpenseCategories.qo(),
@@ -26,20 +30,32 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
       setOpen(false)
       setCount('')
       setCategoryId('')
+      setValidationErrors({})
     },
   })
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    const errors: { count?: string; category?: string } = {}
+    const countNum = count.trim() === '' ? NaN : Number(count)
+    if (count.trim() === '' || Number.isNaN(countNum) || countNum <= 0) {
+      errors.count = 'Введите сумму больше нуля'
+    }
+    if (!categoryId || categoryId === '') {
+      errors.category = 'Выберите категорию'
+    }
+    setValidationErrors(errors)
+    if (Object.keys(errors).length > 0) return
     const params: CreateExpenceParams = {
-      count: count === '' ? null : Number(count),
-      category_id: categoryId === '' ? null : Number(categoryId),
+      count: countNum,
+      category_id: Number(categoryId),
     }
     mutation.mutate(params)
   }
 
   function handleClose() {
     setOpen(false)
+    setValidationErrors({})
   }
 
   return (
@@ -85,18 +101,29 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
                     min={0}
                     step={0.01}
                     value={count}
-                    onChange={(e) => setCount(e.target.value)}
+                    onChange={(e) => {
+                      setCount(e.target.value)
+                      setValidationErrors((prev) => ({ ...prev, count: undefined }))
+                    }}
                     className="rounded-md border border-surface-3 bg-surface-2 px-3 py-2 text-foreground placeholder:text-secondary focus:border-foreground focus:outline-none"
                     placeholder="0"
+                    aria-invalid={!!validationErrors.count}
                   />
+                  {validationErrors.count && (
+                    <p className="text-sm text-red-600">{validationErrors.count}</p>
+                  )}
                 </label>
                 <label className="flex flex-col gap-1 text-sm">
                   <span className="font-medium text-foreground">Категория</span>
                   <select
                     value={categoryId}
-                    onChange={(e) => setCategoryId(e.target.value)}
+                    onChange={(e) => {
+                      setCategoryId(e.target.value)
+                      setValidationErrors((prev) => ({ ...prev, category: undefined }))
+                    }}
                     disabled={isPendingCategories}
                     className="rounded-md border border-surface-3 bg-surface-2 px-3 py-2 text-foreground focus:border-foreground focus:outline-none disabled:opacity-50"
+                    aria-invalid={!!validationErrors.category}
                   >
                     <option value="">— не выбрано —</option>
                     {categories?.map((cat) => (
@@ -105,6 +132,9 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
                       </option>
                     ))}
                   </select>
+                  {validationErrors.category && (
+                    <p className="text-sm text-red-600">{validationErrors.category}</p>
+                  )}
                 </label>
                 {mutation.isError && (
                   <p className="text-sm text-red-600">
@@ -123,7 +153,13 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
                   </button>
                   <button
                     type="submit"
-                    disabled={mutation.isPending}
+                    disabled={
+                      mutation.isPending ||
+                      !count.trim() ||
+                      !categoryId ||
+                      Number.isNaN(Number(count)) ||
+                      Number(count) <= 0
+                    }
                     className="flex-1 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-primary hover:opacity-90 disabled:opacity-50"
                   >
                     {mutation.isPending ? 'Сохранение…' : 'Сохранить'}

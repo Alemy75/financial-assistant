@@ -13,6 +13,7 @@ import type { CreateCategoryParams } from '../../../api/add-category/types'
 export default function AddCategoryDrawer({ di }: { di: Di }) {
   const [open, setOpen] = useState(false)
   const [name, setName] = useState('')
+  const [validationError, setValidationError] = useState<string | null>(null)
 
   const mutation = useMutation({
     ...di.addCategory.mo(),
@@ -20,19 +21,27 @@ export default function AddCategoryDrawer({ di }: { di: Di }) {
       di.getExpenseCategories.invalidateCache()
       setOpen(false)
       setName('')
+      setValidationError(null)
     },
   })
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
+    setValidationError(null)
+    const trimmed = name.trim()
+    if (!trimmed) {
+      setValidationError('Введите название категории')
+      return
+    }
     const params: CreateCategoryParams = {
-      name: name || null,
+      name: trimmed,
     }
     mutation.mutate(params)
   }
 
   function handleClose() {
     setOpen(false)
+    setValidationError(null)
   }
 
   return (
@@ -70,11 +79,18 @@ export default function AddCategoryDrawer({ di }: { di: Di }) {
                   <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      setName(e.target.value)
+                      setValidationError(null)
+                    }}
                     className="rounded-md border border-surface-3 bg-surface-2 px-3 py-2 text-foreground placeholder:text-secondary focus:border-foreground focus:outline-none"
                     placeholder="Например: Продукты"
+                    aria-invalid={!!validationError}
                   />
                 </label>
+                {validationError && (
+                  <p className="text-sm text-red-600">{validationError}</p>
+                )}
                 {mutation.isError && (
                   <p className="text-sm text-red-600">
                     {mutation.error instanceof Error
@@ -92,7 +108,7 @@ export default function AddCategoryDrawer({ di }: { di: Di }) {
                   </button>
                   <button
                     type="submit"
-                    disabled={mutation.isPending}
+                    disabled={mutation.isPending || !name.trim()}
                     className="flex-1 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-primary hover:opacity-90 disabled:opacity-50"
                   >
                     {mutation.isPending ? 'Сохранение…' : 'Сохранить'}
