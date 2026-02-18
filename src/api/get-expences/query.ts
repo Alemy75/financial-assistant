@@ -25,6 +25,11 @@ export function createGetExpenses(deps: {
     return deps.queryClient.ensureQueryData(getQo())
   }
 
+  query.invalidateCache = async () =>
+    deps.queryClient.invalidateQueries({
+      queryKey: ['expense'],
+    })
+
   query.qo = getQo
 
   return query

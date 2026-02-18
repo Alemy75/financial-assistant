@@ -1,6 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
 import { QueryClient } from '@tanstack/react-query'
-import { createGetExpenseCategories, createGetExpenses } from '../api'
+import {
+  createGetExpenseCategories,
+  createGetExpenses,
+  createAddExpenses,
+} from '../api'
 
 export type Di = ReturnType<typeof createDi>
 
@@ -22,10 +26,16 @@ export function createDi() {
     queryClient,
   })
 
+  const addExpence = createAddExpenses({
+    apiClient,
+    queryClient,
+  })
+
   return {
     apiClient,
     queryClient,
     getExpenseCategories,
     getExpenses,
+    addExpence,
   }
 }

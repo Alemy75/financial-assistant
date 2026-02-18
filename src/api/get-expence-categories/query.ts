@@ -8,7 +8,7 @@ export function createGetExpenseCategories(deps: {
 }) {
   function getQo() {
     return {
-      queryKey: ['expense-categories'],
+      queryKey: ['expense_categories'],
       queryFn: async () => {
         const { data, error } = await deps.apiClient
           .from('expense_categories')
