@@ -4,6 +4,7 @@ import {
   createGetExpenseCategories,
   createGetExpenses,
   createAddExpenses,
+  createAddCategory,
 } from '../api'
 
 export type Di = ReturnType<typeof createDi>
@@ -31,11 +32,17 @@ export function createDi() {
     queryClient,
   })
 
+  const addCategory = createAddCategory({
+    apiClient,
+    queryClient,
+  })
+
   return {
     apiClient,
     queryClient,
     getExpenseCategories,
     getExpenses,
     addExpence,
+    addCategory,
   }
 }

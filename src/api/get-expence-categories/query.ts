@@ -27,6 +27,11 @@ export function createGetExpenseCategories(deps: {
     return deps.queryClient.ensureQueryData(getQo())
   }
 
+  query.invalidateCache = async () =>
+    deps.queryClient.invalidateQueries({
+      queryKey: ['expense_categories'],
+    })
+
   query.qo = getQo
 
   return query
