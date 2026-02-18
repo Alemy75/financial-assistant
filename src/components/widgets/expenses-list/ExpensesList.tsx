@@ -27,13 +27,13 @@ export default function ExpensesList({ di }: { di: Di }) {
   return (
     <>
       <div className="overflow-x-auto border border-surface-3 rounded-md text-sm">
-        <table className="w-full table-fixed border-collapse bg-surface-2">
+        <table className="min-w-lg w-full border-collapse bg-surface-2">
           <thead>
             <tr className="text-left bg-surface-3">
-              <th className="w-1/4 p-2 leading-5 font-semibold">Дата</th>
-              <th className="w-1/4 p-2 leading-5 font-semibold">Стоимость</th>
-              <th className="w-1/4 p-2 leading-5 font-semibold">Название</th>
-              <th className="w-1/4 p-2 leading-5 font-semibold">Категория</th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Дата</th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Стоимость</th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Название</th>
+              <th className="p-2 leading-5 font-semibold whitespace-nowrap">Категория</th>
             </tr>
           </thead>
           <tbody>
@@ -58,16 +58,16 @@ export default function ExpensesList({ di }: { di: Di }) {
               expenses.length > 0 &&
               expenses.map((expense) => (
                 <tr key={expense.id} className="border-t border-surface-3">
-                  <td className="p-2 leading-5 truncate">
+                  <td className="p-2 leading-5 whitespace-nowrap">
                     {formatDate(expense.created_at)}
                   </td>
-                  <td className="p-2 leading-5 truncate">
+                  <td className="p-2 leading-5 whitespace-nowrap">
                     {expense.count != null ? `${expense.count} ₽` : '—'}
                   </td>
-                  <td className="p-2 leading-5 min-w-0 truncate">
+                  <td className="p-2 leading-5">
                     {expense.name ?? '—'}
                   </td>
-                  <td className="p-2 leading-5 min-w-0 truncate">
+                  <td className="p-2 leading-5">
                     {getCategoryName(expense.category_id)}
                   </td>
                 </tr>
