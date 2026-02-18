@@ -10,35 +10,70 @@ function formatDate(iso: string): string {
 }
 
 export default function ExpensesList({ di }: { di: Di }) {
-  const { data } = useQuery({ ...di.getExpenses.qo() })
+  const { data: expenses, isPending: isPendingExpenses } = useQuery({
+    ...di.getExpenses.qo(),
+  })
+
+  const { data: categories, isPending: isPendingCategories } = useQuery({
+    ...di.getExpenseCategories.qo(),
+  })
+
+  function getCategoryName(categoryId: number | null): string {
+    return (
+      categories?.find((category) => category.id === categoryId)?.name ?? '—'
+    )
+  }
 
   return (
     <>
-      <div className="overflow-x-auto border border-surface-3 rounded-md">
-        {data && data.length > 0 ? (
-          <table className="w-full border-collapse bg-surface-2">
-            <thead>
-              <tr className="text-left bg-surface-3">
-                <th className="p-2 font-normal">Дата</th>
-                <th className="p-2 font-normal">Стоимость</th>
-                <th className="p-2 font-normal">Название</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((expense) => (
-                <tr key={expense.id} className="border-t border-surface-3">
-                  <td className="p-2">{formatDate(expense.created_at)}</td>
+      <div className="overflow-x-auto border border-surface-3 rounded-md text-sm">
+        <table className="w-full table-fixed border-collapse bg-surface-2">
+          <thead>
+            <tr className="text-left bg-surface-3">
+              <th className="w-1/4 p-2 leading-5 font-semibold">Дата</th>
+              <th className="w-1/4 p-2 leading-5 font-semibold">Стоимость</th>
+              <th className="w-1/4 p-2 leading-5 font-semibold">Название</th>
+              <th className="w-1/4 p-2 leading-5 font-semibold">Категория</th>
+            </tr>
+          </thead>
+          <tbody>
+            {(isPendingExpenses || isPendingCategories) &&
+              [...new Array(5)].map((_, i) => (
+                <tr key={i} className="border-t border-surface-3">
                   <td className="p-2">
-                    {expense.count != null ? `${expense.count} ₽` : '—'}
+                    <div className="h-5 w-2/3 bg-surface-3 rounded-md animate-pulse" />
                   </td>
-                  <td className="p-2">{expense.name ?? '—'}</td>
+                  <td className="p-2">
+                    <div className="h-5 w-1/2 bg-surface-3 rounded-md animate-pulse" />
+                  </td>
+                  <td className="p-2">
+                    <div className="h-5 w-1/2 bg-surface-3 rounded-md animate-pulse" />
+                  </td>
+                  <td className="p-2">
+                    <div className="h-5 w-1/2 bg-surface-3 rounded-md animate-pulse" />
+                  </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-slate-500">Нет расходов</p>
-        )}
+            {expenses &&
+              expenses.length > 0 &&
+              expenses.map((expense) => (
+                <tr key={expense.id} className="border-t border-surface-3">
+                  <td className="p-2 leading-5 truncate">
+                    {formatDate(expense.created_at)}
+                  </td>
+                  <td className="p-2 leading-5 truncate">
+                    {expense.count != null ? `${expense.count} ₽` : '—'}
+                  </td>
+                  <td className="p-2 leading-5 min-w-0 truncate">
+                    {expense.name ?? '—'}
+                  </td>
+                  <td className="p-2 leading-5 min-w-0 truncate">
+                    {getCategoryName(expense.category_id)}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       </div>
     </>
   )
