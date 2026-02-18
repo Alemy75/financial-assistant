@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Banknote, Calendar, Tag } from 'lucide-react'
 import type { Di } from '../../../lib/di'
 
 function formatDate(iso: string): string {
@@ -31,13 +32,22 @@ export default function ExpensesList({ di }: { di: Di }) {
           <thead>
             <tr className="text-left bg-surface-3">
               <th className="p-2 leading-5 font-semibold whitespace-nowrap">
-                Дата
+                <span className="inline-flex items-center gap-1.5">
+                  <Calendar className="size-4" aria-hidden />
+                  Дата
+                </span>
               </th>
               <th className="p-2 leading-5 font-semibold whitespace-nowrap">
-                Стоимость
+                <span className="inline-flex items-center gap-1.5">
+                  <Banknote className="size-4" aria-hidden />
+                  Стоимость
+                </span>
               </th>
               <th className="p-2 leading-5 font-semibold whitespace-nowrap">
-                Категория
+                <span className="inline-flex items-center gap-1.5">
+                  <Tag className="size-4" aria-hidden />
+                  Категория
+                </span>
               </th>
             </tr>
           </thead>

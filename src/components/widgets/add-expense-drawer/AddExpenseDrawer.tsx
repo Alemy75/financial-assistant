@@ -7,6 +7,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react'
+import { Plus } from 'lucide-react'
 import type { Di } from '../../../lib/di'
 import type { CreateExpenceParams } from '../../../api/add-expence/types'
 
@@ -63,8 +64,9 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-md bg-foreground px-4 py-2 text-sm font-medium text-primary hover:opacity-90"
+        className="inline-flex items-center gap-2 rounded-md bg-foreground px-4 py-2 text-sm font-medium text-primary hover:opacity-90"
       >
+        <Plus className="size-4" aria-hidden />
         Добавить расход
       </button>
       <Dialog
@@ -110,7 +112,7 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
                     aria-invalid={!!validationErrors.count}
                   />
                   {validationErrors.count && (
-                    <p className="text-sm text-red-600">{validationErrors.count}</p>
+                    <p className="text-sm text-danger">{validationErrors.count}</p>
                   )}
                 </label>
                 <label className="flex flex-col gap-1 text-sm">
@@ -133,11 +135,11 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
                     ))}
                   </select>
                   {validationErrors.category && (
-                    <p className="text-sm text-red-600">{validationErrors.category}</p>
+                    <p className="text-sm text-danger">{validationErrors.category}</p>
                   )}
                 </label>
                 {mutation.isError && (
-                  <p className="text-sm text-red-600">
+                  <p className="text-sm text-danger">
                     {mutation.error instanceof Error
                       ? mutation.error.message
                       : 'Ошибка при сохранении'}

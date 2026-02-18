@@ -7,6 +7,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react'
+import { FolderPlus } from 'lucide-react'
 import type { Di } from '../../../lib/di'
 import type { CreateCategoryParams } from '../../../api/add-category/types'
 
@@ -49,8 +50,9 @@ export default function AddCategoryDrawer({ di }: { di: Di }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="rounded-md border border-surface-3 bg-surface-2 px-4 py-2 text-sm font-medium text-foreground hover:bg-surface-3"
+        className="inline-flex items-center gap-2 rounded-md border border-surface-3 bg-surface-2 px-4 py-2 text-sm font-medium text-foreground hover:bg-surface-3"
       >
+        <FolderPlus className="size-4" aria-hidden />
         Добавить категорию
       </button>
       <Dialog open={open} onClose={handleClose} className="relative z-50">
@@ -89,10 +91,10 @@ export default function AddCategoryDrawer({ di }: { di: Di }) {
                   />
                 </label>
                 {validationError && (
-                  <p className="text-sm text-red-600">{validationError}</p>
+                  <p className="text-sm text-danger">{validationError}</p>
                 )}
                 {mutation.isError && (
-                  <p className="text-sm text-red-600">
+                  <p className="text-sm text-danger">
                     {mutation.error instanceof Error
                       ? mutation.error.message
                       : 'Ошибка при сохранении'}
