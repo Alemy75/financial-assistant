@@ -35,21 +35,18 @@ export type Database = {
           count: number | null
           created_at: string
           id: number
-          name: string | null
         }
         Insert: {
           category_id?: number | null
           count?: number | null
           created_at?: string
           id?: number
-          name?: string | null
         }
         Update: {
           category_id?: number | null
           count?: number | null
           created_at?: string
           id?: number
-          name?: string | null
         }
         Relationships: [
           {

@@ -12,7 +12,6 @@ import type { CreateExpenceParams } from '../../../api/add-expence/types'
 
 export default function AddExpenseDrawer({ di }: { di: Di }) {
   const [open, setOpen] = useState(false)
-  const [name, setName] = useState('')
   const [count, setCount] = useState('')
   const [categoryId, setCategoryId] = useState<string>('')
 
@@ -25,7 +24,6 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
     onSuccess: () => {
       di.getExpenses.invalidateCache()
       setOpen(false)
-      setName('')
       setCount('')
       setCategoryId('')
     },
@@ -34,7 +32,6 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     const params: CreateExpenceParams = {
-      name: name || null,
       count: count === '' ? null : Number(count),
       category_id: categoryId === '' ? null : Number(categoryId),
     }
@@ -79,16 +76,6 @@ export default function AddExpenseDrawer({ di }: { di: Di }) {
                 onSubmit={handleSubmit}
                 className="mt-4 flex flex-col gap-4"
               >
-                <label className="flex flex-col gap-1 text-sm">
-                  <span className="font-medium text-foreground">Название</span>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="rounded-md border border-surface-3 bg-surface-2 px-3 py-2 text-foreground placeholder:text-secondary focus:border-foreground focus:outline-none"
-                    placeholder="Например: Продукты"
-                  />
-                </label>
                 <label className="flex flex-col gap-1 text-sm">
                   <span className="font-medium text-foreground">
                     Стоимость, ₽
